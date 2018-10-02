@@ -3,18 +3,30 @@ package pkgGame;
 import pkgHelper.LatinSquare;
 
 public class Sudoku extends LatinSquare {
+	//for some reason imported LatinSquare not coming through so all methods from that class error
 	private int iSize;
 	private int iSqrtSize;
 	
-	public Sudoku(int[][] puzzle) throws Exception {
+	public Sudoku(int iSize) throws Exception{
+		this.iSize = iSize;
+
+		double sqrt = Math.sqrt(iSize);
+		if (sqrt == Math.floor(sqrt) && !Double.isInfinite(sqrt)){
+			this.iSqrtSize = (int)sqrt;
+		} 
+		else{
+			throw new Exception("Invalid size");
+		}
+	}
+	
+	public Sudoku(int[][] puzzle) throws Exception{
 		super(puzzle);
 		double SQRT = puzzle.length;
 		this.iSize = puzzle.length;
-		if(Math.floor(SQRT)==SQRT && Double.isInfinite(SQRT) == false) {
+		if(Math.floor(SQRT)==SQRT && Double.isInfinite(SQRT) == false){
 			this.iSqrtSize = (int)SQRT;
 		}
-		
-		else {
+		else{
 			throw new Exception("Size Invalid");
 		}
 	}
@@ -24,18 +36,18 @@ public class Sudoku extends LatinSquare {
 		if (super.hasDuplicates())
 			return true;
 		
-		for (int k = 0; k < this.getPuzzle().length; k++) {
-			if (super.hasDuplicates(getRegion(k))) {
+		for(int x = 0; x < this.getPuzzle().length; x++) {
+			if (super.hasDuplicates(getRegion2(x))) {
 				return true;
 			}
 		}
-	
 		return false;
 	}
 
 	public int[][] getPuzzle() {
 		return super.getLatinSquare();
 	}
+	
 	public int[] getRegion(int col, int row) {
 
 		int a = (col / iSqrtSize)+((row / iSqrtSize)*iSqrtSize);
@@ -62,9 +74,8 @@ public class Sudoku extends LatinSquare {
 		return reg;
 	}
 	
-	public boolean isSudoku() {
-
-		this.setbIgnoreZero(false);
+	public boolean isSudoku(){
+		this.setskipZero(false);
 		
 		if (hasDuplicates())
 			return false;
@@ -74,29 +85,25 @@ public class Sudoku extends LatinSquare {
 		
 		for (int c = 1; c < super.getLatinSquare().length; c++) {
 
-			if (!hasAllValues(getRow(0), getRegion(c))) {
+			if (!hasAllValues(getRow(0), getRegion2(c))) {
 				return false;
 			}
 		}
 
-		if (ContainsZero()) {
+		if(ContainsZero()) {
 			return false;
 		}
-
 		return true;
 	}
 	
 	public boolean isIncompleteSudoku() {
-
-		this.setbIgnoreZero(true);
+		this.setskipZero(true);
 		
 		if (hasDuplicates())
 			return false;
-
 		if (!ContainsZero()) {
 			return false;
 		}
 		return true;
-
 	}
 }

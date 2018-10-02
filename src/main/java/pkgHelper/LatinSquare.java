@@ -2,15 +2,16 @@ package pkgHelper;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang.ArrayUtils;
-
 public class LatinSquare {
 	private int[][] LatinSquare;
 	private boolean skipZero;
 
 	private int[] RemoveZeros(int[] arr) {
-		while (ArrayUtils.contains(arr, 0))
-			arr = ArrayUtils.removeElement(arr, 0);
+		for(int i = 0; i < arr.length - 1 ; i++)
+		{
+			if(arr[i] == 0)
+				arr[ i ] = arr[ i + 1 ]; 
+		}
 		
 		return arr;
 	}
